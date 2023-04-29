@@ -4,3 +4,7 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+.menu-btn:hover{
+    color: blue;
+    font-size: 22px;
+}
