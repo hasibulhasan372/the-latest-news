@@ -8,6 +8,8 @@ import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import AuthLayout from "../layouts/AuthLayout/AuthLayout";
 import CategoryNews from "../pages/News/CategoryNews/CategoryNews";
+import PrivateRoute from "./PrivateRoute";
+import Terms from "../pages/SignUp/Terms";
 
 const router = createBrowserRouter([
     {
@@ -19,18 +21,23 @@ const router = createBrowserRouter([
                 element: <Navigate to='category/0'></Navigate>
             },
             {
-                path:'login',
+                path: 'login',
                 element: <Login></Login>
             },
             {
                 path: 'register',
                 element: <SignUp></SignUp>
+            },
+            {
+                path: 'terms',
+                element: <Terms></Terms>
+
             }
 
         ]
 
     },
-   
+
     {
         path: 'category',
         element: <Main></Main>,
@@ -38,7 +45,7 @@ const router = createBrowserRouter([
             {
                 path: ':id',
                 element: <Category></Category>,
-                loader: ({params}) => fetch(`http://localhost:5000/categories/${params.id}`)
+                loader: ({ params }) => fetch(`https://the-latest-news-server-hasibulhasan372.vercel.app/categories/${params.id}`)
             }
         ]
     },
@@ -48,7 +55,8 @@ const router = createBrowserRouter([
         children: [
             {
                 path: ':id',
-                element: <News></News>
+                element: <PrivateRoute><News></News></PrivateRoute>,
+                loader: ({params}) => fetch(`https://the-latest-news-server-hasibulhasan372.vercel.app/news/${params.id}`)
             }
         ]
     }

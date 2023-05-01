@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logo from '../../../assets/logo.png'
 import moment from 'moment/moment';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import Marquee from "react-fast-marquee";
 import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 
 const Header = () => {
+    const {user, logOut} = useContext(AuthContext);
+
+    const handleLogOut = () =>{
+        logOut()
+        .then()
+        .catch(error =>{
+            console.log(error)
+        })
+    }
+
     return (
         <Container className='text-center'>
             <img className='img-fluid' src={logo} alt="" />
@@ -29,9 +40,11 @@ const Header = () => {
 
                         </Nav>
                         <Nav className='align-items-center fw-semibold gap-4'>
-                            <NavLink href="#deets">Profile</NavLink>
+                            {user && <p>Hello User</p>}
                             
-                            <Link to='/login' className='btn btn-primary' >Login</Link>
+                            {
+                                user ? <Button onClick={handleLogOut} className='btn btn-primary' >Logout</Button> : <Link to='/login' className='btn btn-primary' >Login</Link>
+                            }
 
                            
                         </Nav>

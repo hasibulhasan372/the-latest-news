@@ -1,12 +1,39 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
 
 const SignUp = () => {
+    const {createUser} = useContext(AuthContext);
+    const [accept, setAccept] = useState(false)
+
+    const navigate = useNavigate()
+    const handleSignUp = (e) =>{
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const photo = form.photo.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        createUser(email, password)
+        .then(result =>{
+            const signUpUser = result.user;
+            navigate('/login')
+        })
+        .then(error =>{
+            console.log(error)
+        })
+        
+    };
+    const handleChecked = e =>{
+        setAccept(e.target.checked)
+
+    }
+
     return (
         <Container >
             <h2>Please Sign Up </h2>
-        <Form>
+        <Form onSubmit={handleSignUp} className=' border p-4 rounded'>
             <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Your Name</Form.Label>
                 <Form.Control type="text" name='name' placeholder="Enter your name" />
@@ -25,9 +52,12 @@ const SignUp = () => {
                 <Form.Control type="password" name='password' placeholder="Password" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
+                <Form.Check
+                onClick={handleChecked}
+                 type="checkbox"
+                  label={<>Accept <Link to='/terms'>Terms and Condition </Link></>} />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" disabled={!accept} type="submit">
                 Submit
             </Button>
             <br />
